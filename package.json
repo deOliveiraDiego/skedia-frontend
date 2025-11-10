@@ -1,0 +1,17 @@
+{
+  "name": "skedia-frontend-monorepo",
+  "version": "1.0.0",
+  "description": "Skedia Chat Agent - Frontend and Backend",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "build:all": "npm run build:backend && npm run build:frontend"
+  },
+  "keywords": ["skedia", "chat", "agent", "n8n"],
+  "author": "Skedia Team",
+  "license": "UNLICENSED",
+  "private": true
+}
