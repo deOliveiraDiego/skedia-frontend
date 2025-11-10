@@ -16,19 +16,21 @@ Este guia mostra como fazer deploy do Skedia Chat no EasyPanel.
 ## Deploy do Backend
 
 1. **Criar novo serviço no EasyPanel**
-   - Tipo: `Node.js`
+   - Clique em **"+ Service"**
+   - Escolha **"App"**
    - Nome: `skedia-backend`
-   - Repositório: Seu repositório GitHub
+   - Conecte ao seu repositório GitHub
    - Branch: `main`
-   - Build Path: `backend`
+   - Build Path: `/backend`
 
 2. **Configurar Build**
-   - Build Command: `npm install && npm run build`
-   - Start Command: `npm start`
+   - Build Type: Selecione **"Dockerfile"** (o projeto já tem Dockerfile!)
+   - O EasyPanel vai detectar automaticamente o Dockerfile em `/backend/Dockerfile`
    - Port: `3001`
 
 3. **Variáveis de Ambiente**
-   Adicione as seguintes variáveis no EasyPanel:
+   - Vá na aba **"Environment"** (menu lateral)
+   - Adicione as seguintes variáveis:
    ```
    DB_HOST=aws-1-sa-east-1.pooler.supabase.com
    DB_PORT=5432
@@ -39,46 +41,46 @@ Este guia mostra como fazer deploy do Skedia Chat no EasyPanel.
    NODE_ENV=production
    ```
 
-4. **Após o deploy**
-   - Anote a URL pública do backend (ex: `https://skedia-backend.easypanel.host`)
+4. **Deploy**
+   - Vá na aba **"Deployments"**
+   - Clique em **"Deploy"**
+   - Aguarde o build completar (pode levar 2-3 minutos)
+
+5. **Após o deploy**
+   - Vá na aba **"Domains"** e anote a URL pública do backend
+   - Ex: `https://skedia-backend.easypanel.host` ou similar
 
 ## Deploy do Frontend
 
-1. **Criar arquivo `.env` local**
-   ```bash
-   cd frontend
-   cp .env.example .env
-   ```
-
-2. **Configurar URL do Backend**
-   Edite o arquivo `.env`:
-   ```
-   VITE_API_URL=https://skedia-backend.easypanel.host
-   ```
-   ⚠️ **Importante**: Substitua pela URL real do seu backend no EasyPanel!
-
-3. **Criar novo serviço no EasyPanel**
-   - Tipo: `Static Site` ou `Node.js`
+1. **Criar novo serviço no EasyPanel**
+   - Clique em **"+ Service"**
+   - Escolha **"App"**
    - Nome: `skedia-frontend`
-   - Repositório: Seu repositório GitHub
+   - Conecte ao seu repositório GitHub
    - Branch: `main`
-   - Build Path: `frontend`
+   - Build Path: `/frontend`
 
-4. **Configurar Build**
-   - Build Command: `npm install && npm run build`
-   - Output Directory: `dist`
-   - Port (se Node.js): `3000`
+2. **Configurar Build**
+   - Build Type: Selecione **"Dockerfile"** (o projeto já tem Dockerfile!)
+   - O EasyPanel vai detectar automaticamente o Dockerfile em `/frontend/Dockerfile`
+   - Port: `80` (o nginx roda na porta 80)
 
-   **OU**, se usar Static Site:
-   - Build Command: `npm install && npm run build`
-   - Publish Directory: `dist`
-
-5. **Variáveis de Ambiente**
-   Adicione no EasyPanel:
+3. **Variáveis de Ambiente**
+   - Vá na aba **"Environment"** (menu lateral)
+   - Adicione a seguinte variável:
    ```
    VITE_API_URL=https://skedia-backend.easypanel.host
    ```
-   ⚠️ Substitua pela URL real do backend!
+   ⚠️ **IMPORTANTE**: Substitua pela URL real do seu backend que você anotou no passo anterior!
+
+4. **Deploy**
+   - Vá na aba **"Deployments"**
+   - Clique em **"Deploy"**
+   - Aguarde o build completar (pode levar 2-3 minutos)
+
+5. **Após o deploy**
+   - Vá na aba **"Domains"** para ver a URL pública do frontend
+   - Acesse a URL e teste a aplicação!
 
 ## Ordem de Deploy
 
