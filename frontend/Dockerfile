@@ -13,7 +13,11 @@ RUN npm install
 # Copiar código fonte
 COPY . .
 
-# Build da aplicação (VITE_API_URL será fornecido via ENV)
+# ARG para receber variável de ambiente durante o build
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+
+# Build da aplicação
 RUN npm run build
 
 # Stage 2: Servir com nginx

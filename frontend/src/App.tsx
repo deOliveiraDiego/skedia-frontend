@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Contact } from './types';
 import { api } from './services/api';
 import AppHeader from './components/AppHeader';
