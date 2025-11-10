@@ -38,10 +38,11 @@ pool.on('connect', () => {
 
 pool.on('error', (err) => {
   console.error('❌ Erro na conexão com PostgreSQL:', err.message);
-  process.exit(-1);
+  console.error('   (Servidor continuará rodando)');
+  // NÃO mata o servidor - deixa ele continuar rodando
 });
 
-// Testar conexão no startup
+// Testar conexão no startup (mas NÃO mata o servidor se falhar)
 (async () => {
   try {
     console.log('🔍 Testando conexão com banco...');
@@ -67,6 +68,8 @@ pool.on('error', (err) => {
       console.error('   Database:', process.env.DB_NAME);
       console.error('   User:', process.env.DB_USER);
     }
+    console.error('⚠️  Servidor vai iniciar MESMO SEM o banco conectado');
+    console.error('   As rotas vão retornar erro 500 até o banco conectar');
   }
 })();
 
