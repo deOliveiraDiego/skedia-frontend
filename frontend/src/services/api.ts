@@ -5,7 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 export const api = {
   // Busca todos os contatos
   async getContacts(): Promise<Contact[]> {
-    const response = await fetch(`${API_URL}/contacts`);
+    const response = await fetch(`${API_URL}/api/contacts`);
     if (!response.ok) {
       throw new Error('Failed to fetch contacts');
     }
@@ -14,7 +14,7 @@ export const api = {
 
   // Busca conversas de um contato específico
   async getConversation(phone: string): Promise<Message[]> {
-    const response = await fetch(`${API_URL}/conversations/${encodeURIComponent(phone)}`);
+    const response = await fetch(`${API_URL}/api/conversations/${encodeURIComponent(phone)}`);
     if (!response.ok) {
       throw new Error('Failed to fetch conversation');
     }
@@ -23,7 +23,7 @@ export const api = {
 
   // Alterna status do agente (pausar/ativar)
   async toggleAgent(phone: string, active: boolean): Promise<ToggleAgentResponse> {
-    const response = await fetch(`${API_URL}/agent/toggle/${encodeURIComponent(phone)}`, {
+    const response = await fetch(`${API_URL}/api/agent/toggle/${encodeURIComponent(phone)}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
