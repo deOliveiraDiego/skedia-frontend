@@ -1,4 +1,4 @@
-import { Pool, QueryResult } from 'pg';
+import { Pool, QueryResult, QueryResultRow } from 'pg';
 
 interface RetryOptions {
   maxRetries?: number;
@@ -9,7 +9,7 @@ interface RetryOptions {
  * Executa uma query com retry automático em caso de falha de conexão
  * Útil para lidar com conexões que caem temporariamente
  */
-export async function queryWithRetry<T = any>(
+export async function queryWithRetry<T extends QueryResultRow = any>(
   pool: Pool,
   text: string,
   params?: any[],
