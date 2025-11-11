@@ -12,9 +12,12 @@ const pool = connectionString
       ssl: {
         rejectUnauthorized: false,
       },
-      connectionTimeoutMillis: 30000,
-      idleTimeoutMillis: 30000,
-      max: 10,
+      connectionTimeoutMillis: 10000, // Timeout para estabelecer conexão
+      idleTimeoutMillis: 0, // Não fecha conexões idle (deixa o Supabase gerenciar)
+      max: 5, // Reduz pool para evitar sobrecarga
+      min: 0, // Permite pool vazio quando não há uso
+      keepAlive: true, // Mantém conexões vivas com keep-alive packets
+      keepAliveInitialDelayMillis: 10000,
     })
   : new Pool({
       host: process.env.DB_HOST || 'localhost',
@@ -27,9 +30,12 @@ const pool = connectionString
             rejectUnauthorized: false,
           }
         : false,
-      connectionTimeoutMillis: 30000,
-      idleTimeoutMillis: 30000,
-      max: 10,
+      connectionTimeoutMillis: 10000,
+      idleTimeoutMillis: 0,
+      max: 5,
+      min: 0,
+      keepAlive: true,
+      keepAliveInitialDelayMillis: 10000,
     });
 
 pool.on('connect', () => {
@@ -38,8 +44,13 @@ pool.on('connect', () => {
 
 pool.on('error', (err) => {
   console.error('❌ Erro na conexão com PostgreSQL:', err.message);
-  console.error('   (Servidor continuará rodando)');
-  // NÃO mata o servidor - deixa ele continuar rodando
+  console.error('   (Servidor continuará rodando - pool tentará reconectar automaticamente)');
+  // NÃO mata o servidor - o pool do pg reconecta automaticamente
+});
+
+// Monitora remoção de clientes do pool
+pool.on('remove', () => {
+  console.log('⚠️  Cliente removido do pool - pool criará nova conexão quando necessário');
 });
 
 // Testar conexão no startup (mas NÃO mata o servidor se falhar)

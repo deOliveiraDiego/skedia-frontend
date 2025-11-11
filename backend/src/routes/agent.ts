@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import pool from '../db/connection';
+import { queryWithRetry } from '../db/retry';
 import { ToggleAgentRequest, ToggleAgentResponse } from '../types';
 
 const router = Router();
@@ -24,7 +25,7 @@ router.patch('/toggle/:phone', async (req: Request, res: Response) => {
       RETURNING agent_active;
     `;
 
-    const result = await pool.query(query, [active, phone]);
+    const result = await queryWithRetry(pool, query, [active, phone]);
 
     if (result.rowCount === 0) {
       console.log(`❌ Contato ${phone} não encontrado`);

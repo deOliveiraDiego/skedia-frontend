@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import pool from '../db/connection';
+import { queryWithRetry } from '../db/retry';
 import { ContactListItem } from '../types';
 
 const router = Router();
@@ -39,7 +40,7 @@ router.get('/', async (req: Request, res: Response) => {
     `;
 
     console.log('   → Executando query no banco...');
-    const result = await pool.query<ContactListItem>(query);
+    const result = await queryWithRetry<ContactListItem>(pool, query);
     const duration = Date.now() - startTime;
 
     console.log(`✅ ${result.rows.length} contatos encontrados em ${duration}ms`);

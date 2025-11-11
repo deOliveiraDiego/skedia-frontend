@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import pool from '../db/connection';
+import { queryWithRetry } from '../db/retry';
 import { ChatMessage } from '../types';
 
 const router = Router();
@@ -21,7 +22,7 @@ router.get('/:phone', async (req: Request, res: Response) => {
       ORDER BY created_at ASC;
     `;
 
-    const result = await pool.query<ChatMessage>(query, [phone]);
+    const result = await queryWithRetry<ChatMessage>(pool, query, [phone]);
     console.log(`✅ ${result.rows.length} mensagens encontradas`);
     res.json(result.rows);
   } catch (error: any) {
